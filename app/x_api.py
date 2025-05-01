@@ -1,3 +1,4 @@
+# app/x_api.py
 import os
 import streamlit as st
 import requests
@@ -11,7 +12,6 @@ X_AUTH_URL = "https://twitter.com/i/oauth2/authorize"
 X_TOKEN_URL = "https://api.twitter.com/2/oauth2/token"
 X_USERINFO_URL = "https://api.twitter.com/2/users/me?user.fields=description,location,public_metrics"
 
-# PKCE helpers
 def gerar_pkce():
     code_verifier = base64.urlsafe_b64encode(secrets.token_bytes(32)).rstrip(b"=").decode("utf-8")
     code_challenge = base64.urlsafe_b64encode(
@@ -21,7 +21,10 @@ def gerar_pkce():
 
 def iniciar_login():
     code_verifier, code_challenge = gerar_pkce()
-    st.session_state["x_code_verifier"] = code_verifier
+
+    os.makedirs(".tmp", exist_ok=True)
+    with open(".tmp/code_verifier.txt", "w") as f:
+        f.write(code_verifier)
 
     params = {
         "response_type": "code",
@@ -33,13 +36,21 @@ def iniciar_login():
         "code_challenge_method": "S256"
     }
     auth_url = f"{X_AUTH_URL}?{urlencode(params)}"
-    st.markdown(f"[🔗 Clique aqui para conectar com o X]({auth_url})")
+
+    # Ícone de login com X
+    st.markdown(
+        f'<a href="{auth_url}" target="_self">'
+        f'<img src="https://abs.twimg.com/favicons/twitter.2.ico" width="32" title="Conectar com X" style="margin:5px;"></a>',
+        unsafe_allow_html=True
+    )
 
 def trocar_codigo_por_token(code):
-    code_verifier = st.session_state.get("x_code_verifier")
-    if not code_verifier:
-        print("[ERRO] code_verifier não encontrado na session_state")
-        raise Exception("code_verifier ausente – fluxo PKCE inválido")
+    try:
+        with open(".tmp/code_verifier.txt") as f:
+            code_verifier = f.read().strip()
+    except FileNotFoundError:
+        print("[ERRO] Arquivo de code_verifier não encontrado")
+        return False
 
     data = {
         "client_id": config.X_CLIENT_ID,
@@ -60,6 +71,7 @@ def trocar_codigo_por_token(code):
     if resp.status_code == 200:
         token = resp.json()["access_token"]
         st.session_state["x_token"] = token
+        st.session_state["x_autenticado"] = True
         print("[DEBUG] Token de acesso salvo em session_state.")
         return True
 
