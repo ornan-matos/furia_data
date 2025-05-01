@@ -1,14 +1,18 @@
-# app/fan_form.py
 import os
 import streamlit as st
 from app.config import config
 from app.utils import validar_cpf, salvar_fan_data
 from app.grok_api import validar_documento_grok
-from app.x_api import coletar_dados_x
+from app.x_api import coletar_dados_x, iniciar_login
 import uuid
 
 def render():
     st.subheader("📋 Cadastro de Fã da FURIA")
+
+    if not st.session_state.get("x_autenticado"):
+        st.warning("⚠️ Para enviar o cadastro, conecte sua conta do X (Twitter) abaixo:")
+        iniciar_login()
+        return
 
     with st.form("form_fan", clear_on_submit=True):
         col1, col2 = st.columns(2)
@@ -44,9 +48,6 @@ def render():
         st.markdown("**📤 Upload de Documento (PNG, JPG ou PDF)**")
         doc = st.file_uploader("Selecione o documento", type=["png", "jpg", "jpeg", "pdf"])
 
-        st.markdown("**🔐 Autenticação com X (opcional)**")
-        usar_x = st.checkbox("Conectar com minha conta do X")
-
         submit = st.form_submit_button("Enviar Cadastro")
 
     if submit:
@@ -70,8 +71,8 @@ def render():
             st.error(f"Documento inválido: {relatorio_grok}")
             return
 
-        # Dados da conta X (se conectado)
-        dados_x = coletar_dados_x() if usar_x else {}
+        # Dados da conta X (obrigatório)
+        dados_x = coletar_dados_x()
 
         # Monta o dicionário final para salvar
         fan_data = {
