@@ -1,5 +1,5 @@
 import os
-import requests
+from openai import OpenAI
 from app.config import config
 
 def validar_documento_grok(doc_path: str):
@@ -14,25 +14,37 @@ def validar_documento_grok(doc_path: str):
         return False, "Arquivo de documento não encontrado"
 
     try:
-        with open(doc_path, 'rb') as file:
-            files = {'file': file}
-            headers = {"Authorization": f"Bearer {config.GROK_API_KEY}"}
-            response = requests.post(
-                "https://api.x.ai/v1",
-                files=files,
-                headers=headers
-            )
+        client = OpenAI(
+            base_url="https://api.x.ai/v1",
+            api_key=config.GROK_API_KEY
+        )
 
-        if response.status_code == 200:
-            resultado = response.json()
-            if resultado.get("valid", False):
-                return True, resultado.get("report", "Documento validado com sucesso.")
-            else:
-                return False, resultado.get("message", "Documento inválido.")
-        else:
-            return False, f"Erro na API do Grok: {response.status_code}"
+        with open(doc_path, "rb") as image_file:
+            image_data = image_file.read()
+
+        # Envia a imagem para análise usando o modelo de imagem
+        response = client.images.generate(
+            model="grok-2-image-1212",
+            prompt="Analise este documento de identidade ou comprovante"
+        )
+
+        image_url = response.data[0].url
+
+        # Em seguida, envia esse link para análise de perfil textual
+        completion = client.chat.completions.create(
+            model="grok-3-beta",
+            messages=[
+                {"role": "system", "content": "Você é um especialista em validação de documentos e perfis."},
+                {"role": "user", "content": f"Analise o seguinte documento: {image_url}. Retorne se o documento parece válido para os padrões de um documento de registro geral (RG) que aceito no Brasil e também se é o tipo de perfil do usuário."},
+            ]
+        )
+
+        resultado = completion.choices[0].message.content
+        return True, resultado
+
     except Exception as e:
         return False, f"Erro na requisição: {str(e)}"
+
 
 def gerar_relatorio_simulado(nome_arquivo: str) -> str:
     return (
