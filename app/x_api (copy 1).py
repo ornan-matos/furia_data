@@ -36,34 +36,18 @@ def iniciar_login():
     st.markdown(f"[🔗 Clique aqui para conectar com o X]({auth_url})")
 
 def trocar_codigo_por_token(code):
-    code_verifier = st.session_state.get("x_code_verifier")
-    if not code_verifier:
-        print("[ERRO] code_verifier não encontrado na session_state")
-        raise Exception("code_verifier ausente – fluxo PKCE inválido")
-
     data = {
         "client_id": config.X_CLIENT_ID,
         "grant_type": "authorization_code",
         "code": code,
         "redirect_uri": config.X_REDIRECT_URI,
-        "code_verifier": code_verifier
+        "code_verifier": st.session_state.get("x_code_verifier")
     }
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
-
-    print(f"[DEBUG] Enviando dados para token exchange:\n{data}")
-
     resp = requests.post(X_TOKEN_URL, data=data, headers=headers)
-
-    print(f"[DEBUG] Status da resposta do X: {resp.status_code}")
-    print(f"[DEBUG] Corpo da resposta: {resp.text}")
-
     if resp.status_code == 200:
-        token = resp.json()["access_token"]
-        st.session_state["x_token"] = token
-        print("[DEBUG] Token de acesso salvo em session_state.")
+        st.session_state["x_token"] = resp.json()["access_token"]
         return True
-
-    print(f"[ERRO] Falha ao trocar código por token. Status: {resp.status_code}")
     return False
 
 def coletar_dados_x():
@@ -86,7 +70,6 @@ def coletar_dados_x():
     resp = requests.get(X_USERINFO_URL, headers=headers)
     if resp.status_code != 200:
         st.error("Erro ao obter dados da conta do X.")
-        print(f"[ERRO] Falha ao buscar dados do X: {resp.status_code} - {resp.text}")
         return {}
 
     user = resp.json().get("data", {})
