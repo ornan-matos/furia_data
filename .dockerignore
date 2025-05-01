@@ -1,0 +1,19 @@
+# Ignorar controle de versão e cache
+.git/
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar arquivos de ambiente
+.env
+
+# Ignorar arquivos de sistema e editor
+.DS_Store
+.vscode/
+.idea/
+
+# Cache de dependências ou arquivos temporários
+*.log
+*.db-journal
+*.sqlite3
+uploads/
