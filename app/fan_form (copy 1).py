@@ -91,10 +91,4 @@ def render():
         }
 
         salvar_fan_data(fan_data)
-        st.success("✅ Cadastro enviado com sucesso!")
-
-        # Preserva o code_verifier do X para não quebrar o fluxo OAuth após o redirect
-        x_code_verifier = st.session_state.get("x_code_verifier")
-        st.session_state.clear()
-        if x_code_verifier:
-            st.session_state["x_code_verifier"] = x_code_verifier
+        st.success("Cadastro enviado com sucesso!")
