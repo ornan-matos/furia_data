@@ -6,8 +6,12 @@ from app.callback_handler import processar_callback
 
 st.set_page_config(page_title="FURIA Fan Data", layout="wide")
 
+processar_callback()
+
+inicializar_banco()
+
 with st.sidebar:
-    st.image("static/logo_furia.png", width=180)
+    st.image("static/logo_furia.png", width=200)
     st.title("FURIA Fan Data")
     menu = st.radio("Navegar", ["Cadastro de Fã", "Administração"])
 
@@ -19,7 +23,5 @@ elif menu == "Administração":
     else:
         st.warning("Acesso restrito à administração.")
 
-processar_callback()
 
-inicializar_banco()
 
