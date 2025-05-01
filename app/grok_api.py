@@ -1,6 +1,6 @@
 # app/grok_api.py
 import os
-from PIL import Image
+from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
 from openai import OpenAI
 from app.config import config
@@ -8,8 +8,24 @@ from app.config import config
 def extrair_texto_ocr(caminho_imagem):
     try:
         imagem = Image.open(caminho_imagem)
+
+        # Pré-processamento: escala de cinza
+        imagem = imagem.convert("L")
+
+        # Aumentar contraste
+        enhancer = ImageEnhance.Contrast(imagem)
+        imagem = enhancer.enhance(2.0)
+
+        # Binarização (threshold)
+        imagem = imagem.point(lambda x: 0 if x < 140 else 255, '1')
+
+        # Filtro de nitidez
+        imagem = imagem.filter(ImageFilter.SHARPEN)
+
+        # Executar OCR
         texto = pytesseract.image_to_string(imagem, lang='por')
         return texto.strip()
+
     except Exception as e:
         return f"[ERRO AO EXTRAIR TEXTO]: {str(e)}"
 
@@ -52,7 +68,6 @@ def validar_documento_grok(doc_path: str):
 
     except Exception as e:
         return False, f"Erro na requisição: {str(e)}"
-
 
 def gerar_relatorio_simulado(nome_arquivo: str) -> str:
     return (
