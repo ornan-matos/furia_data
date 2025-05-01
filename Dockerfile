@@ -19,5 +19,9 @@ EXPOSE 8501
 # Define variável de ambiente padrão para modo offline
 ENV OFFLINE_MODE=true
 
+#Debug Temp
+CMD ["streamlit", "run", "main_debug.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
+
 # Comando de entrada
-CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
