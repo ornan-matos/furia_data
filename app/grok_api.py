@@ -1,6 +1,17 @@
+# app/grok_api.py
 import os
+from PIL import Image
+import pytesseract
 from openai import OpenAI
 from app.config import config
+
+def extrair_texto_ocr(caminho_imagem):
+    try:
+        imagem = Image.open(caminho_imagem)
+        texto = pytesseract.image_to_string(imagem, lang='por')
+        return texto.strip()
+    except Exception as e:
+        return f"[ERRO AO EXTRAIR TEXTO]: {str(e)}"
 
 def validar_documento_grok(doc_path: str):
     if config.OFFLINE_MODE:
@@ -14,28 +25,25 @@ def validar_documento_grok(doc_path: str):
         return False, "Arquivo de documento não encontrado"
 
     try:
+        texto_extraido = extrair_texto_ocr(doc_path)
+
         client = OpenAI(
             base_url="https://api.x.ai/v1",
             api_key=config.GROK_API_KEY
         )
 
-        with open(doc_path, "rb") as image_file:
-            image_data = image_file.read()
-
-        # Envia a imagem para análise usando o modelo de imagem
-        response = client.images.generate(
-            model="grok-2-image-1212",
-            prompt="Analise este documento de identidade ou comprovante"
+        prompt = (
+            "Você é um especialista em análise de documentos brasileiros.\n"
+            "Foi extraído o seguinte conteúdo de um documento de identidade por OCR:\n\n"
+            f"{texto_extraido}\n\n"
+            "Avalie se o conteúdo parece autêntico e, com base nele, gere um pequeno relatório do perfil desse usuário."
         )
 
-        image_url = response.data[0].url
-
-        # Em seguida, envia esse link para análise de perfil textual
         completion = client.chat.completions.create(
             model="grok-3-beta",
             messages=[
-                {"role": "system", "content": "Você é um especialista em validação de documentos e perfis."},
-                {"role": "user", "content": f"Analise o seguinte documento: {image_url}. Retorne se o documento parece válido para os padrões de um documento de registro geral (RG) que aceito no Brasil e também se é o tipo de perfil do usuário."},
+                {"role": "system", "content": "Você é um analista de documentos e perfis de usuários."},
+                {"role": "user", "content": prompt},
             ]
         )
 
