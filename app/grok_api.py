@@ -18,7 +18,7 @@ def validar_documento_grok(doc_path: str):
             files = {'file': file}
             headers = {"Authorization": f"Bearer {config.GROK_API_KEY}"}
             response = requests.post(
-                "https://api.grok.example.com/validate_document",
+                "https://api.x.ai/v1",
                 files=files,
                 headers=headers
             )
