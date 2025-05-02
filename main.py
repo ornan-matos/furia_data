@@ -4,7 +4,8 @@ from app.config import config
 from app.database import inicializar_banco
 from app.callback_handler import processar_callback
 
-st.set_page_config(page_title="FURIA Fan Data", layout="wide")
+st.set_page_config(page_title=" FURIA Fan Data", layout="wide")
+
 
 processar_callback()
 

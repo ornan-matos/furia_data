@@ -72,9 +72,22 @@ def render_graficos():
     atividades = explode_json_column(df, "atividades")
     plot_bar_chart(atividades, "Atividades")
 
-    st.markdown("### 🎫 Eventos mencionados")
-    eventos = df["eventos"].value_counts()
-    plot_bar_chart(eventos, "Eventos")
+    st.markdown("### 🎫 Eventos mais citados")
+    eventos_lista = []
+    eventos_formatos = []
+    for evento_raw in df["eventos"].dropna():
+        try:
+            data = json.loads(evento_raw)
+            if isinstance(data, dict):
+                eventos_lista.extend(data.get("lista", []))
+                eventos_formatos.append(data.get("formato", "Não informado"))
+            else:
+                # Retrocompatível: se for string simples
+                eventos_formatos.append(str(data))
+        except Exception as e:
+            eventos_formatos.append("Erro")
+    plot_bar_chart(pd.Series(eventos_lista).value_counts(), "Eventos")
+    plot_bar_chart(pd.Series(eventos_formatos).value_counts(), "Formato do Evento")
 
     st.markdown("### 🌐 Sites de eSports preferidos")
     sites = explode_json_column(df, "sites")

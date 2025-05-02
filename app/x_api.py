@@ -1,4 +1,3 @@
-# app/x_api.py
 import os
 import streamlit as st
 import requests
@@ -19,7 +18,7 @@ def gerar_pkce():
     ).rstrip(b"=").decode("utf-8")
     return code_verifier, code_challenge
 
-def iniciar_login():
+def iniciar_login(return_url=False):
     code_verifier, code_challenge = gerar_pkce()
 
     os.makedirs(".tmp", exist_ok=True)
@@ -37,7 +36,10 @@ def iniciar_login():
     }
     auth_url = f"{X_AUTH_URL}?{urlencode(params)}"
 
-    # Ícone de login com X
+    if return_url:
+        return auth_url
+
+    # comportamento antigo (apenas o ícone)
     st.markdown(
         f'<a href="{auth_url}" target="_self">'
         f'<img src="https://abs.twimg.com/favicons/twitter.2.ico" width="32" title="Conectar com X" style="margin:5px;"></a>',
@@ -49,7 +51,7 @@ def trocar_codigo_por_token(code):
         with open(".tmp/code_verifier.txt") as f:
             code_verifier = f.read().strip()
     except FileNotFoundError:
-        print("[ERRO] Arquivo de code_verifier não encontrado")
+        print("[ERRO] Arquivo de code_verifier.txt não encontrado")
         return False
 
     data = {
@@ -59,10 +61,17 @@ def trocar_codigo_por_token(code):
         "redirect_uri": config.X_REDIRECT_URI,
         "code_verifier": code_verifier
     }
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+    # Autorização básica com client_id + client_secret
+    auth_string = f"{config.X_CLIENT_ID}:{config.X_CLIENT_SECRET}"
+    auth_encoded = base64.b64encode(auth_string.encode()).decode()
+
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": f"Basic {auth_encoded}"
+    }
 
     print(f"[DEBUG] Enviando dados para token exchange:\n{data}")
-
     resp = requests.post(X_TOKEN_URL, data=data, headers=headers)
 
     print(f"[DEBUG] Status da resposta do X: {resp.status_code}")

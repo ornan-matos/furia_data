@@ -39,7 +39,7 @@ def salvar_fan_data(data: dict):
         )
     ''')
 
-    # Converte listas e dicionários em JSON para armazenar como TEXT
+    # Serializa campos complexos (listas e dicionários) como JSON
     valores = (
         data["nome"],
         data["email"],
@@ -47,7 +47,7 @@ def salvar_fan_data(data: dict):
         data["endereco"],
         json.dumps(data["interesses"]),
         json.dumps(data["atividades"]),
-        data["eventos"],
+        json.dumps(data["eventos"]),            # ✅ corrigido aqui
         json.dumps(data["produtos"]),
         json.dumps(data["sites"]),
         data["redes_sociais"],
@@ -70,3 +70,4 @@ def salvar_fan_data(data: dict):
 def limpar_formulario():
     # Streamlit já limpa automaticamente com clear_on_submit=True
     pass
+

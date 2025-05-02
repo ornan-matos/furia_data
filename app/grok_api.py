@@ -52,7 +52,7 @@ def validar_documento_grok(doc_path: str):
             "Você é um especialista em análise de documentos brasileiros.\n"
             "Foi extraído o seguinte conteúdo de um documento de identidade por OCR:\n\n"
             f"{texto_extraido}\n\n"
-            "Avalie se o conteúdo parece autêntico e, com base nele, gere um pequeno relatório do perfil desse usuário."
+            "Avalie se o conteúdo parece autêntico e, com base nele, gere um pequeno relatório do perfil desse usuário. Ofereça uma lista curta com resultado das analises de forma objetiva."
         )
 
         completion = client.chat.completions.create(
