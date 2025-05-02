@@ -129,6 +129,10 @@ OFFLINE_MODE=true
 - Certifique-se de expor a porta `8501`
 
 ---
+## 📄 Licença
+
+- Este projeto é apenas para fins educacionais e demonstração técnica. Não está afiliado oficialmente à equipe FURIA.
+---
 
 ## ✍️ Autor
 
