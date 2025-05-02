@@ -81,7 +81,7 @@ def render():
             ])
 
             atividades = st.multiselect("Atividades de engajamento", [
-                "Comentando jogos", "Postando memes", "Participando de sorteios",
+                "Comentando em streams", "Compartilhando Posts", "Participando de sorteios",
                 "Criando conteúdo", "Consumindo streams", "Outros"
             ])
 
@@ -112,8 +112,8 @@ def render():
 
         redes_sociais = st.text_input("Links de redes sociais (X, Instagram, etc.)")
 
-        st.markdown("**📤 Upload de Documento (PNG, JPG ou PDF)**")
-        doc = st.file_uploader("Selecione o documento", type=["png", "jpg", "jpeg", "pdf"])
+        st.markdown("**📤 Upload de Documento para Identificação (RG ou CPF)**")
+        doc = st.file_uploader("Selecione o documento", type=["png", "jpg", "jpeg"])
 
         submit = st.form_submit_button("Enviar Cadastro")
 
