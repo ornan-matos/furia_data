@@ -76,6 +76,10 @@ Se quiser rodar **em modo offline** (sem Grok nem X):
 OFFLINE_MODE=true
 ```
 
+### 🌐 Acessar area adminstrativa
+
+Senha para acessar area de Administrador: **admin-123** 
+
 ---
 
 ## ▶️ Executar Localmente
