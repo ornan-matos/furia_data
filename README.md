@@ -129,11 +129,13 @@ OFFLINE_MODE=true
 - Certifique-se de expor a porta `8501`
 
 ---
-## 📄 Licença
 
+### 📄 Licença
+
+- Este projeto está sob a licença **MIT**.
 - Este projeto é apenas para fins educacionais e demonstração técnica. Não está afiliado oficialmente à equipe FURIA.
 ---
 
-## ✍️ Autor
+##### ✍️ Autor
 
 Desenvolvido por Ornan Matos, 2025.
