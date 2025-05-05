@@ -76,6 +76,10 @@ Se quiser rodar **em modo offline** (sem Grok nem X):
 OFFLINE_MODE=true
 ```
 
+### 🌐 Acessar area adminstrativa
+
+Senha para acessar area de Administrador: **admin-123** 
+
 ---
 
 ## ▶️ Executar Localmente
@@ -129,11 +133,13 @@ OFFLINE_MODE=true
 - Certifique-se de expor a porta `8501`
 
 ---
-## 📄 Licença
 
+### 📄 Licença
+
+- Este projeto está sob a licença **MIT**.
 - Este projeto é apenas para fins educacionais e demonstração técnica. Não está afiliado oficialmente à equipe FURIA.
 ---
 
-## ✍️ Autor
+##### ✍️ Autor
 
 Desenvolvido por Ornan Matos, 2025.
