@@ -134,12 +134,15 @@ OFFLINE_MODE=true
 
 ---
 
-### 📄 Licença
+##  Contribuições
 
-- Este projeto está sob a licença **MIT**.
-- Este projeto é apenas para fins educacionais e demonstração técnica. Não está afiliado oficialmente à equipe FURIA.
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests com melhorias ou sugestões.
+
 ---
 
-##### ✍️ Autor
+##  Licença
 
-Desenvolvido por Ornan Matos, 2025.
+Copyright (©) 2025 **Ornan S. C. Matos**. Todos os direitos reservados.
+
+Este software é propriedade de **Ornan S. C. Matos** e é protegido pelas leis de direitos autorais.
+Nenhuma parte deste software pode ser modificada, distribuída ou sublicenciada sem a autorização prévia por escrito do proprietário dos direitos autorais. Para solicitar permissão, entre em contato com **ornanmatos@outlook.com**.
