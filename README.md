@@ -4,7 +4,7 @@ Sistema completo de coleta de dados de fãs da equipe de eSports FURIA, com inte
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - Formulário com validação de CPF, email e upload de documento
 - Análise de engajamento, eventos e produtos adquiridos
@@ -16,7 +16,7 @@ Sistema completo de coleta de dados de fãs da equipe de eSports FURIA, com inte
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 furia_fan_data/
@@ -46,7 +46,7 @@ furia_fan_data/
 
 ---
 
-## ⚙️ Requisitos
+## Requisitos
 
 - Python 3.11+
 - Docker (opcional)
@@ -54,7 +54,7 @@ furia_fan_data/
 
 ---
 
-## 🔐 Configuração `.env`
+## Configuração `.env`
 
 Crie um arquivo `.env` na raiz com o seguinte conteúdo:
 
@@ -76,13 +76,13 @@ Se quiser rodar **em modo offline** (sem Grok nem X):
 OFFLINE_MODE=true
 ```
 
-### 🌐 Acessar area adminstrativa
+### Acessar area adminstrativa
 
 Senha para acessar area de Administrador: **admin-123** 
 
 ---
 
-## ▶️ Executar Localmente
+## Executar Localmente
 
 ### 1. Instalar dependências
 ```bash
@@ -110,13 +110,13 @@ docker run -p 8501:8501 --env-file .env furia-fan-data
 
 ---
 
-## 📊 Acesso à Área Administrativa
+## Acesso à Área Administrativa
 
 Acesse via menu lateral > "Administração" e informe a senha definida em `ADMIN_PASSWORD`.
 
 ---
 
-## 🧠 Modo Offline
+## Modo Offline
 
 Para testes locais e simulações sem API externa:
 ```env
@@ -126,7 +126,7 @@ OFFLINE_MODE=true
 
 ---
 
-## 📦 Deploy (exemplo: Railway)
+## Deploy (exemplo: Railway)
 
 - Use o `Dockerfile` fornecido
 - Adicione as variáveis do `.env` no painel da Railway
